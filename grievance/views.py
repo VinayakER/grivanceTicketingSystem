@@ -41,3 +41,13 @@ def comment(request, ticket_id):
             c.save()
     # comment = Comment()
     return redirect(f"/ticket/{ticket_id}")
+
+
+@login_required
+def ticketStatus(request, ticket_id, value):
+
+    ticket = Grievance.objects.get(id=ticket_id)
+    ticket.status = value
+    ticket.save()
+    # comment = Comment()
+    return redirect(f"/ticket/{ticket_id}")

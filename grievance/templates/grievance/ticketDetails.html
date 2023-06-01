@@ -58,13 +58,56 @@
                         <div class="d-flex w-75 justify-content-between mx-auto">
                             <span class="font-italic">Assigned to: {{ticket.assigned_to}}</span>
                             <span class="font-italic">Created at: {{ticket.created_at}}</span>
-                            <span class="font-italic">Status: 
-                            {% if ticket.status == 1 %}
-                            <span class="badge badge-danger">New</span> {% elif ticket.status == 2 %}
-                            <span class="badge badge-warning">Open</span> {% elif ticket.status == 3 %}
-                            <span class="badge badge-primary">Resolved</span> {% else %}
-                            <span class="badge badge-success">Closed</span> {% endif %}
-                        </span>
+                            <span class="font-italic">Status:  
+                                {%if user.is_student%}
+                                {% if ticket.status == 1 %}
+                                <span class="badge badge-danger">New</span> {% elif ticket.status == 2 %}
+                                <span class="badge badge-warning">Open</span> {% elif ticket.status == 3 %}
+                                <span class="badge badge-primary">Resolved</span> {% else %}
+                                <span class="badge badge-success">Closed</span> {% endif %}
+                                {%else%}
+
+                                    <div class="btn-group">
+                                        {% if ticket.status == 1 %}
+                                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                New
+                                        </button>
+                                            
+                                        {% elif ticket.status == 2 %}
+                                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Open
+                                            </button>
+                                        {% elif ticket.status == 3 %}
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Resolved
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Closed
+                                            </button>
+                                        {% endif %}
+                                    <div class="dropdown-menu">
+                                        {% if ticket.status == 1 %}
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/2">Open</a>
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/3">Resolve</a>
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/4">Close</a>
+                                        {% elif ticket.status == 2 %}
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/3">Resolve</a>
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/4">Close</a>
+                                        {% elif ticket.status == 3 %}
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/2">Open</a>
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/4">Close</a>
+                                        {% else %}
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/2">Open</a>
+                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/3">Resolved</a>
+                                        {% endif %}
+                                        
+                                        </div>
+                                    </div>
+                                {%endif%}
+                            </span>
+                        <!-- Example single danger button -->
+                       
                         </div>
                         <hr class="mx-4">
                     </div>
@@ -92,8 +135,8 @@
                                     <div class="input-group mb-0">
                                     {%csrf_token%}
                                     <input type="text" class="form-control" name="message" placeholder="Type message" id="msg-input"
-                                        aria-label="Recipient's username" aria-describedby="button-addon2" />
-                                    <button class="btn btn-success ml-4" type="submit" id="button-addon2" style="padding-top: .55rem;">
+                                        aria-label="Recipient's username" aria-describedby="button-addon2" {% if ticket.status == 4 %}disabled{%endif%} />
+                                    <button class="btn btn-success ml-4" type="submit" id="button-addon2" style="padding-top: .55rem;" {% if ticket.status == 4 %}disabled{%endif%}>
                                         Comment
                                     </button>
                                 </div>
