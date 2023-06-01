@@ -1,9 +1,10 @@
-from django.http import HttpResponse
-from .models import Grievance
+from django.http import HttpResponse, JsonResponse
+from .models import Grievance, Comment
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+@login_required
 def grievance(request):
     grievances=Grievance.objects.all()
     
@@ -23,3 +24,20 @@ def make_complaint(request):
         return redirect("/")
 
     return render(request,'grievance/make_complaint.html')
+
+@login_required
+def ticketDetails(request, id):
+    ticket = Grievance.objects.get(id=id)
+    comments = Comment.objects.filter(ticket=ticket).order_by("-created_at")
+    return render(request,"grievance/ticketDetails.html", context={"ticket":ticket, "comments":comments})
+
+@login_required
+def comment(request, ticket_id):
+    if request.method=="POST":
+        data = request.POST
+        if data.get("message"):
+            ticket = Grievance.objects.get(id=ticket_id)
+            c = Comment(body=data.get("message"),ticket=ticket, created_by=request.user)
+            c.save()
+    # comment = Comment()
+    return redirect(f"/ticket/{ticket_id}")

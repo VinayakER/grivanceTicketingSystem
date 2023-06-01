@@ -45,12 +45,13 @@
                 </tr>
             </thead>
             <!--Table head-->
-
+            
             <!--Table body-->
             <tbody>
+                
                 {% for gr in grievances%}
                 <tr class="table-info">
-                    <th scope="row">{{gr.id}}</th>
+                    <th scope="row"><a href="/ticket/{{gr.id}}">{{gr.id}}</a></th>
                     <td>{{gr.title}}</td>
                     <td>{{gr.created_by}}</td>
 
@@ -74,6 +75,7 @@
                     <td><a href="#" class="btn btn-success">Close</a></td>
                     {% endif %}
                 </tr>
+                
                 {% endfor %}
             </tbody>
             <!--Table body-->
@@ -81,6 +83,9 @@
 
         </table>
         <!--Table-->
+        {% if not grievances %}
+            <p class="text-center pt-2">No Ticket in your account</p>
+        {%endif%}
 
     </div>
 </body>

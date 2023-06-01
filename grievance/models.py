@@ -17,3 +17,13 @@ class Grievance(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
     created_by=models.ForeignKey(User,on_delete=models.CASCADE)
     status=models.SmallIntegerField(choices=STATUS_OPTIONS,default=1)
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL,null=True,blank=True, related_name="assigned_grievances")
+
+    def __str__(self) -> str:
+        return self.title
+    
+class Comment(models.Model):
+    body = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    ticket = models.ForeignKey(Grievance, on_delete=models.CASCADE)
