@@ -55,7 +55,17 @@
                         <p class="pt-3">#<span id="ticket_id">{{ticket.id}}</span></p>
                         <h2 class="text-center">{{ticket.title}}</h2>
                         <p class="mb-1">Created by : {{ticket.created_by}}</p>
-                        <p>{{ticket.created_at}}</p>
+                        <div class="d-flex w-75 justify-content-between mx-auto">
+                            <span class="font-italic">Assigned to: {{ticket.assigned_to}}</span>
+                            <span class="font-italic">Created at: {{ticket.created_at}}</span>
+                            <span class="font-italic">Status: 
+                            {% if ticket.status == 1 %}
+                            <span class="badge badge-danger">New</span> {% elif ticket.status == 2 %}
+                            <span class="badge badge-warning">Open</span> {% elif ticket.status == 3 %}
+                            <span class="badge badge-primary">Resolved</span> {% else %}
+                            <span class="badge badge-success">Closed</span> {% endif %}
+                        </span>
+                        </div>
                         <hr class="mx-4">
                     </div>
         
@@ -108,7 +118,7 @@
                 // validation fails if the input is blank
                 if(form.message.value == '') {
                     form.inputfield.focus();
-                    alert("not working")
+                    // alert("not working")
                     return false;
                 }
 

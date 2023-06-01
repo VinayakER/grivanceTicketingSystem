@@ -28,7 +28,7 @@ def make_complaint(request):
 @login_required
 def ticketDetails(request, id):
     ticket = Grievance.objects.get(id=id)
-    comments = Comment.objects.filter(ticket=ticket).order_by("-created_at")
+    comments = Comment.objects.filter(ticket=ticket)
     return render(request,"grievance/ticketDetails.html", context={"ticket":ticket, "comments":comments})
 
 @login_required
