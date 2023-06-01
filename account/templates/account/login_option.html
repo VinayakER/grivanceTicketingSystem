@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            font-family: sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .bg {
+            background-image: url(/static/images/bg.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            min-height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            background: #000a;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header-details {
+            color: #fff;
+        }
+        
+        .header-details span.subscript-text {
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        .logo-container img {
+            width: 150px;
+        }
+        
+        .header-details .address p {
+            max-width: 500px;
+            line-height: 20px;
+            margin: 0 auto;
+        }
+        
+        .body-section {
+            color: #fff;
+        }
+        
+        .body-section .content-container {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            padding: 220px 0 320px;
+        }
+        
+        #wlink a {
+            padding: 20px;
+            text-decoration: none;
+            color: #99ffff;
+        }
+        
+        #wlink {
+            color: white;
+            font-family: arial, serif;
+        }
+        
+        #footer {
+            padding: 20px;
+        }
+        
+        #footer p {
+            text-align: center;
+            color: #fff;
+        }
+        
+        #footer p a {
+            color: rgb(195, 0, 29);
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="bg"> </div>
+    <div class="container">
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="/static/images/logo.png">
+            </div>
+            <div class="header-details">
+                <h1 class="header-heading">Rayat Bahra Institute of Engineering and Nano Technology <span class="subscript-text">(Coed.)</span></h1>
+
+                <div class="address">
+                    <p>RBIENT was started in 2008 . This Institute is affiliated to IKG Punjab Technical University Kapurthala and approved by AICTE, Delhi, Director Technical Education Government of Punjab.</p>
+                </div>
+            </div>
+        </div>
+        <div class="body-section">
+            <div class="content-container">
+                <h2>Rayat Bahra college Grievance Application</h2>
+                <div id="wlink">
+                    <h4><a href="/login/user">Userlogin</a>|<a href="/login/admin">Admin login</a></h4>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer">
+            <p>Copyright &copy;
+                <a href="http://ipv4.rayatbahra.com/hoshiarpur-campus.php">Rayat Bahra</a> | Grievance Application System </p>
+        </div>
+    </div>
+</body>
+
+</html>

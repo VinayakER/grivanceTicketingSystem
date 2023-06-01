@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Form</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/side_nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <style>
+        input[type=text],
+        select,
+        textarea,
+        input[type=date] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            /* resize: vertical; */
+        }
+        /* Style the label to display next to the inputs */
+        
+        label {
+            padding: 12px 12px 12px 0;
+            display: inline-block;
+        }
+        /* Style the submit button */
+        
+        input[type=submit] {
+            background-color: #04AA6D;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        /* Style the container */
+        
+        .container {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        /* Floating column for labels: 25% width */
+        
+        .col-25 {
+            float: left;
+            width: 25%;
+            margin-top: 6px;
+        }
+        /* Floating column for inputs: 75% width */
+        
+        .col-75 {
+            float: left;
+            width: 75%;
+            margin-top: 6px;
+        }
+        /* Clear floats after the columns */
+        
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+        
+        @media screen and (max-width: 600px) {
+            .col-25,
+            .col-75,
+            input[type=submit] {
+                width: 100%;
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'components/sidenav.html' %}
+    <div class="page-content p-5" id="content">
+        <div class="container">
+            <form action="" method="POST">
+                {% csrf_token%}
+                <div class="row">
+                    <div class="col-25">
+                        <label for="name">Name of the Student</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="name" name="firstname" placeholder="Your name.." value="{{user.first_name}}" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="rollnumber">Student Roll number</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="rollnumber" name="rollnumber" placeholder="Your roll number.." value="{{user.username}}" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="department">Student's Department</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="department" name="department" placeholder="Your department" value="{{user.department.name}}" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="title">Title</label>
+                    </div>
+                    <div class="col-75">
+                        <input type="text" id="title" name="title" placeholder="Complaint title">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="categories">Categories</label>
+                    </div>
+                    <div class="col-75">
+                        <select id="categories" name="categories">
+                            <option value="Select categories of Grievance">Select categories of Grievance..</option>
+                            <option value="acadamic">Acadamic(features)</option>
+                            <option value="accounts& Billing">Accounts & Billing</option>
+                            <option value="exam cell">Exam cell</option>
+                            <option value="library">Library</option>
+                            <option value="tranning & placement cell">Tranning & Placement cell</option>
+                            <option value="canteen">Canteen</option>
+                            <option value="hostel">Hostel</option>
+                            <option value="transport">Transport</option>
+                            <option value="laboratory">Laboratory</option>
+                            <option value="others">Others</option>
+                </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="types">Type</label>
+                    </div>
+                    <div class="col-75">
+                        <select id="types" name="types">
+                            <option value="Select type of compalaint">Select type of compalaint..</option>
+                            <option value="complaint">Complaint</option>
+                            <option value="grievance">Grievance</option>
+                            <option value="redrassal idea !">Redrassal idea !</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                        <div class="col-25">
+                            <label for="complaint-date">Date of Complaint:</label>
+
+                        </div>
+                        <div class="col-75">
+                            <input type="date" id="compalint-date" name="compalint-date">
+                        </div>
+                    </div> -->
+                <!-- <div class="row">
+                        <div class="col-25">
+                            <label for="department">Department</label>
+                        </div>
+                        <div class="col-75">
+                            <select id="department" name="department">
+                                <option value="Select department">Select department</option>
+                                <option value="Btech-cse">Btech CSE</option>
+                                <option value="Btech-it">Btech IT </option>
+                                <option value="Btech civil">Btech CIVIL</option>
+                                <option value="Btech Mechanical Engineering">Btech Mechanical Engineering</option>
+                                <option value="b.nursing">B.Nursing</option>
+                                <option value="B.pharm">B.pharm</option>
+                                <option value="B.com">B.Com</option>
+                                <option value="BBA">BBA</option>
+                                <option value="MBA">MBA</option>
+                            </select>
+                        </div>
+                    </div> -->
+                <div class="row">
+                    <div class="col-25">
+                        <label for="subject">Description of Complaint </label>
+                    </div>
+                    <div class="col-75">
+                        <textarea id="description" name="description" placeholder="Write complaint.." style="height:200px"></textarea>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="file-select"> Complaint Upload:</label>
+
+                    </div>
+                    <div class="col-75">
+                        <input type="file" name="upload" id="file-select">
+                    </div>
+                </div>
+                <div class="row">
+                    <input class="w-100" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
