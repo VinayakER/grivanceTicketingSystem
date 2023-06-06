@@ -55,57 +55,63 @@
                         <p class="pt-3">#<span id="ticket_id">{{ticket.id}}</span></p>
                         <h2 class="text-center">{{ticket.title}}</h2>
                         <p class="mb-1">Created by : {{ticket.created_by}}</p>
+                        <form action="/ticket/{{ticket.id}}/update" method="POST">
+                            {%csrf_token%}
                         <div class="d-flex w-75 justify-content-between mx-auto">
-                            <span class="font-italic">Assigned to: {{ticket.assigned_to}}</span>
+                            <span class="font-italic d-flex align-items-center">
+                                <span class="ml-1" name="assigned-to" style="width:128px;">Assigned to: </span> 
+                                {% if user.is_student %}
+                                    {{ticket.assigned_to}}
+                                {% else %}
+                                <div class="input-group d-inline">
+                                    <select class="custom-select w-100" name="assigned_to" id="ticket-assigned-to">
+                                        {%if ticket.assigned_to%}
+                                        <option value="{{ticket.assigned_to.id}}" selected>{{ticket.assigned_to}}</option>
+                                    {%else%}
+                                        <option value="" selected>----------</option>
+                                    {% endif %}
+                                    {% for u in users %}
+                                        {% if u == ticket.assigned_to %}
+
+                                        {%else%}
+                                            <option value="{{u.id}}">{{u}}</option>
+                                        {%endif%}
+                                    {% endfor %}
+                                    </select>
+                                  </div>
+                                {% endif %}
+
+                            </span>
                             <span class="font-italic">Created at: {{ticket.created_at}}</span>
                             <span class="font-italic">Status:  
-                                {%if user.is_student%}
+                                {% if user.is_student %}
                                 {% if ticket.status == 1 %}
                                 <span class="badge badge-danger">New</span> {% elif ticket.status == 2 %}
                                 <span class="badge badge-warning">Open</span> {% elif ticket.status == 3 %}
                                 <span class="badge badge-primary">Resolved</span> {% else %}
                                 <span class="badge badge-success">Closed</span> {% endif %}
-                                {%else%}
-
-                                    <div class="btn-group">
-                                        {% if ticket.status == 1 %}
-                                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                New
-                                        </button>
-                                            
-                                        {% elif ticket.status == 2 %}
-                                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Open
-                                            </button>
-                                        {% elif ticket.status == 3 %}
-                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Resolved
-                                            </button>
-                                        {% else %}
-                                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Closed
-                                            </button>
-                                        {% endif %}
-                                    <div class="dropdown-menu">
-                                        {% if ticket.status == 1 %}
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/2">Open</a>
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/3">Resolve</a>
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/4">Close</a>
-                                        {% elif ticket.status == 2 %}
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/3">Resolve</a>
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/4">Close</a>
-                                        {% elif ticket.status == 3 %}
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/2">Open</a>
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/4">Close</a>
-                                        {% else %}
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/2">Open</a>
-                                            <a class="dropdown-item" href="/ticket/{{ticket.id}}/status/3">Resolved</a>
-                                        {% endif %}
-                                        
-                                        </div>
-                                    </div>
-                                {%endif%}
+        
+                                {% else %}
+                                <div class="input-group d-inline">
+                                    <select class="custom-select w-100" name="status" id="ticket-status">
+                                        {% if ticket.status == 1 %}                                        
+                                        <option value="1"selected>New</option>
+                                        {%endif%}
+                                        <option value="2" {%if ticket.status == 2 %}selected{%endif%}>Open</option>
+                                        <option value="3" {%if ticket.status == 3 %}selected{%endif%}>Resolve</option>
+                                        <option value="4" {%if ticket.status == 4 %}selected{%endif%}>Close</option>
+                              
+                                    </select>
+                                  </div>
+                                  {%endif%}
                             </span>
+
+                            <div class="update-buttons d-none" id="ticket-update-buttons">
+                                <button class="btn btn-primary" type="submit">Update</button>
+                                <button class="btn btn-danger">Cancel</button>
+                            </div>
+                        </form>
+
                         <!-- Example single danger button -->
                        
                         </div>
@@ -155,9 +161,11 @@
         
     </div>
     <script>
+        var status = "";
+        var assigned_to = null;
         function checkForm(form)
             {
-                alert(form.message.value=='');
+                // alert(form.message.value=='');
                 // validation fails if the input is blank
                 if(form.message.value == '') {
                     form.inputfield.focus();
@@ -167,20 +175,35 @@
 
                 return true;
             }
+        function toggleUpdateButtons(){
+            if(document.getElementById('ticket-status').value!=status){
+                    document.getElementById('ticket-update-buttons').classList.remove("d-none");
+                }
+                else if(document.getElementById("ticket-assigned-to").value!=assigned_to){
+                    document.getElementById('ticket-update-buttons').classList.remove("d-none");
+                }
+                else{
+                    document.getElementById('ticket-update-buttons').classList.add("d-none");
+
+                }
+        }
         window.onload =()=>{
             let chatContainer = document.getElementsByClassName('comments-container')[0];
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
 
-            // let form = document.getElementById('message-form');
-            // console.log(form);
-            // form.addEventListener("submit", function(evt) {
-            //     evt.preventDefault();
-            //     let message = document.getElementById("msg-input").value;
-            //     console.log(message);
-            //     let ticket_id = document.getElementById("ticket_id");
-            //     fetch("/ticket/"+ticket_id+"/comment")
-            // }, true);
+            status = document.getElementById("ticket-status").value;
+            assigned_to = document.getElementById("ticket-assigned-to").value;
+
+            document.getElementById("ticket-status").addEventListener("change", (evt)=>{
+                toggleUpdateButtons()
+
+
+            });
+            document.getElementById("ticket-assigned-to").addEventListener("change", (evt)=>{
+                toggleUpdateButtons()
+            });
+
 
 
         }
