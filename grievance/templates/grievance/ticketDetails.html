@@ -60,8 +60,8 @@
                         <div class="d-flex w-75 justify-content-between mx-auto">
                             <span class="font-italic d-flex align-items-center">
                                 <span class="ml-1" name="assigned-to" style="width:128px;">Assigned to: </span> 
-                                {% if user.is_student %}
-                                    {{ticket.assigned_to}}
+                                {% if user.is_student or user.is_staff %}
+                                    <span id="ticket-assigned-to">{{ticket.assigned_to}}</span>
                                 {% else %}
                                 <div class="input-group d-inline">
                                     <select class="custom-select w-100" name="assigned_to" id="ticket-assigned-to">

@@ -22,7 +22,7 @@
 
     <!-- Page content holder -->
     <div class="page-content p-5" id="content">
-        <div class="container-fluid bg-light p-4 rounded">
+        <div class="container bg-light p-4 rounded">
             <h1>Dashboard</h1>
         {% include 'components/err_messages_component.html' %}
         <!--Table-->
@@ -34,7 +34,7 @@
                     <th>Refrence number</th>
                     <th>Title</th>
                     <th>Created by</th>
-                    {% if user.is_admin or user.is_staff %}
+                    {% if user.is_admin or user.is_staff%}
                     <th>Department</th>
                     {% endif %}
                     <th>Status</th>
@@ -55,7 +55,7 @@
                     <td>{{gr.title}}</td>
                     <td>{{gr.created_by}}</td>
 
-                    {% if user.is_admin or user.is_staff %}
+                    {% if user.is_admin or user.is_staff%}
                     <td>{{gr.created_by.department.name}}</td>
                     {% endif %}
 

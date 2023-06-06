@@ -23,7 +23,7 @@
                 <i class="fa fa-address-card mr-3 text-primary fa-fw"></i> Make Complaint
             </a>
         </li>
-        {%endif%} {% if user.is_admin %}
+        {%endif%} {% if user.is_admin or user.is_staff %}
         <li class="nav-item">
             <a href="{% url 'dashboard' %}?status=1" class="nav-link text-dark ">
                 <i class="fa fa-address-card mr-3 text-primary fa-fw"></i> New Complaints<span class="badge badge-secondary ml-2">{{new_count}}</span>

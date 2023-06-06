@@ -32,7 +32,30 @@ def ticketDetails(request, id):
     ticket = Grievance.objects.get(id=id)
     comments = Comment.objects.filter(ticket=ticket)
     users = User.objects.filter(Q(is_staff=True)&Q(is_superuser=False))
-    return render(request,"grievance/ticketDetails.html", context={"ticket":ticket, "comments":comments, "users":users})
+    context={"ticket":ticket, "comments":comments, "users":users}
+    if request.user.is_admin or request.user.is_staff:
+        if request.user.is_staff:
+            new_count=Grievance.objects.filter(assigned_to=request.user,status=1).count()
+            open_count=Grievance.objects.filter(assigned_to=request.user,status=2).count()
+            resolved_count=Grievance.objects.filter(assigned_to=request.user,status=3).count()
+            closed_count=Grievance.objects.filter(assigned_to=request.user,status=4).count()
+        
+        else:
+            new_count=Grievance.objects.filter(status=1).count()
+            open_count=Grievance.objects.filter(status=2).count()
+            resolved_count=Grievance.objects.filter(status=3).count()
+            closed_count=Grievance.objects.filter(status=4).count()
+        
+        
+        context={
+            "ticket":ticket, "comments":comments, "users":users,
+            'new_count':new_count,
+            'open_count':open_count,
+            'resolved_count':resolved_count,
+            'closed_count':closed_count,
+            }
+
+    return render(request,"grievance/ticketDetails.html", context=context)
 
 @login_required
 def comment(request, ticket_id):

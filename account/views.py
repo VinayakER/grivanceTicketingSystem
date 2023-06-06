@@ -40,7 +40,7 @@ def adminLogin(request):
         password=data.get('password')
         user=authenticate(username=username,password=password)
         if user:
-            if not user.is_admin:
+            if not (user.is_admin or user.is_staff):
                 messages.error(request, 'Invalid username or passoword for admin')
                 return render(request,'account/admin.html')
             login(request,user)
@@ -57,7 +57,7 @@ def logoutView(request):
 def dashboard(request):
     user=request.user
     status = request.GET.get("status")
-    if (user.is_student or user.is_admin):
+    if (user.is_student or user.is_admin or user.is_staff):
         if user.is_student:
             grievances=Grievance.objects.filter(created_by=user)
             context={
@@ -65,14 +65,30 @@ def dashboard(request):
             }
         else:
             if status and (status in [1,2,3,4,"1","2","3","4"]):
-                grievances=Grievance.objects.filter(status=status)
+                if user.is_staff:
+                    grievances=Grievance.objects.filter(status=status, assigned_to=user)
+                else:
+                    grievances=Grievance.objects.filter(status=status)
+
             else:
-                grievances=Grievance.objects.all()
+                if user.is_staff:
+                    grievances=Grievance.objects.filter(assigned_to=user)
+                
+                else:
+                    grievances=Grievance.objects.all()
             
-            new_count=Grievance.objects.filter(status=1).count()
-            open_count=Grievance.objects.filter(status=2).count()
-            resolved_count=Grievance.objects.filter(status=3).count()
-            closed_count=Grievance.objects.filter(status=4).count()
+            if user.is_staff:
+                new_count=Grievance.objects.filter(assigned_to=user,status=1).count()
+                open_count=Grievance.objects.filter(assigned_to=user,status=2).count()
+                resolved_count=Grievance.objects.filter(assigned_to=user,status=3).count()
+                closed_count=Grievance.objects.filter(assigned_to=user,status=4).count()
+            else:
+                new_count=Grievance.objects.filter(status=1).count()
+                open_count=Grievance.objects.filter(status=2).count()
+                resolved_count=Grievance.objects.filter(status=3).count()
+                closed_count=Grievance.objects.filter(status=4).count()
+            
+            
             context={
                 'grievances':grievances,
                 'new_count':new_count,
@@ -80,6 +96,7 @@ def dashboard(request):
                 'resolved_count':resolved_count,
                 'closed_count':closed_count,
                 }
+
         return render(request,'account/user_dashboard.html',context=context)
 
     return HttpResponse(f"Sorry {user.username}, you are not allowed to access this page")
